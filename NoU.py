@@ -8,23 +8,17 @@ Created on Sun Apr 19 15:13:50 2020
 import os
 import discord
 import asyncio
+import string
 from dotenv import load_dotenv
 from datetime import datetime
 
-import logger
-
-logger = logging.getLogger('discord')
-logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
-handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-logger.addHandler(handler)
-
-
 if __name__ == "__main__":
+    
+    print("Starting...")
     
     # Get environment
     load_dotenv()
-    TOKEN = os.getenv("DISCORD_TOKEN")
+    token = os.getenv("DISCORD_TOKEN")
 
     # Connect to Discord
     client = discord.Client()
@@ -33,4 +27,20 @@ if __name__ == "__main__":
     async def on_ready():
         print(f'{client.user} has connected to Discord!')
     
+    @client.event
+    async def on_message(message):
+        if message.author == client.user:
+            return
+        
+        content = message.content
+        content = content.lower().strip()
+        content = ' '.join(content.split())
+        content = content.translate(str.maketrans("", "", string.punctuation))
+        
+        if content == "no u":
+            try:
+                await message.channel.send(f'@{message.author} No U')
+            except:
+                print("Could not reply")
     
+    client.run(token)
