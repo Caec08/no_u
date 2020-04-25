@@ -34,7 +34,6 @@ if __name__ == "__main__":
         content = message.content
         content = content.lower().strip()
         content = content.translate(str.maketrans(string.punctuation, " "*len(string.punctuation)))
-        content = ' '.join(content.split())
         
         s = content.split()
         
