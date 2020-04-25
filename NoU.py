@@ -10,7 +10,6 @@ import discord
 import asyncio
 import string
 from dotenv import load_dotenv
-from datetime import datetime
 
 if __name__ == "__main__":
 
@@ -34,13 +33,18 @@ if __name__ == "__main__":
 
         content = message.content
         content = content.lower().strip()
+        content = content.translate(str.maketrans(string.punctuation, " "*len(string.punctuation)))
         content = ' '.join(content.split())
-        content = content.translate(str.maketrans("", "", string.punctuation))
-
-        if content == "no u":
-            try:
-                await message.channel.send(f'{message.author.mention} No U')
-            except:
-                print("Could not reply")
+        
+        s = content.split()
+        
+        for i in range(0,len(s)):
+            if s[i] == "no":
+                if s[i+1] == "u":
+                    try:
+                        await message.channel.send(f'{message.author.mention} No u')
+                        return
+                    except:
+                        print("Could not reply")
 
     client.run(token)
